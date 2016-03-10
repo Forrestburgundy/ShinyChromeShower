@@ -5,7 +5,6 @@ import praw
 import urllib
 import requests
 from io import BytesIO
-import re
 
 #######     SETTINGS        #######
 FONT = "Roboto-Light.ttf"
@@ -94,20 +93,27 @@ def draw_my_text(image, text):
                         align='center', spacing=5, fill="white")
     img.save(imageName, "JPEG", quality=100, optimize=True, progressive=True)
 
+def upload_to_flickr(imageName):
+    TODO
+
 if __name__ == "__main__":
     for i in range(LIM):
         image = next(images)
+        "Handle a non direct imgur link"
         if "imgur" in image.url and "." not in image.url:
             image.url += ".jpg"
         try:
             W, H = get_image_size(image.url)
         except IOError:
             continue
+        "Arbitrary threshold for aspect ratio, seems to work well"
         if .5 < H/W and H/W < .67:
+            "Label image using current date, time and image in sequence.
             imageName = time.strftime("%d%m%y"+ str(i) + ".jpg")
             urllib.urlretrieve(image.url, imageName)
             img = Image.open(imageName)
             thought = next(thoughts).title
+            "Wait for download"
             time.sleep(5)
             font = ImageFont.truetype(FONT, int(H*.03))
             draw = ImageDraw.Draw(img)
