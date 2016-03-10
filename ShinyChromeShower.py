@@ -3,6 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
 import time, praw, urllib, requests
 from io import BytesIO
 
+
 #######     SETTINGS        #######
 FONT = "Roboto-Light.ttf"
 IMAGE_SUBREDDIT = "EarthPorn"
@@ -109,10 +110,11 @@ if __name__ == "__main__":
             imageName = time.strftime("%d%m%y"+ str(i) + ".jpg")
             urllib.urlretrieve(image.url, imageName)
             "Wait for download"
-            time.sleep(10)
+            time.sleep(15)
             img = Image.open(imageName)
             thought = next(thoughts).title
             font = ImageFont.truetype(FONT, int(H*.03))
             draw = ImageDraw.Draw(img)
             thought = multiline_text(thought, W, H)
             draw_my_text(img, thought)
+    os.system("uploadr.py")
