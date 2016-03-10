@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 from PIL import Image, ImageDraw, ImageFont
-import time
-import praw
-import urllib
-import requests
+import time, praw, urllib, requests
 from io import BytesIO
 
 #######     SETTINGS        #######
@@ -20,7 +17,7 @@ thoughts = reddit.get_subreddit(TEXT_SUBREDDIT).get_top(limit=LIM)
 def get_image_size(url):
     """
     Gets the dimensions of a web image. url must be a direct link to the image,
-    currently little support around this.
+    currently little support around this. Will timeout if 
 
     Args:
         url (string): The url of the hosted image
@@ -28,8 +25,8 @@ def get_image_size(url):
     Returns:
         tuple(float, float): (image width, image height)
     """
-    data = requests.get(url).content
-    im = Image.open(BytesIO(data))    
+    data = requests.get(url, timeout=(1, 1)).content
+    im = Image.open(BytesIO(data))
     return float(im.size[0]), float(im.size[1])
 
 def multiline_text(text, image_width, image_height):
@@ -108,13 +105,13 @@ if __name__ == "__main__":
             continue
         "Arbitrary threshold for aspect ratio, seems to work well"
         if .5 < H/W and H/W < .67:
-            "Label image using current date, time and image in sequence.
+            "Label image using current date, time and image in sequence."
             imageName = time.strftime("%d%m%y"+ str(i) + ".jpg")
             urllib.urlretrieve(image.url, imageName)
+            "Wait for download"
+            time.sleep(10)
             img = Image.open(imageName)
             thought = next(thoughts).title
-            "Wait for download"
-            time.sleep(5)
             font = ImageFont.truetype(FONT, int(H*.03))
             draw = ImageDraw.Draw(img)
             thought = multiline_text(thought, W, H)
