@@ -117,4 +117,5 @@ if __name__ == "__main__":
             draw = ImageDraw.Draw(img)
             thought = multiline_text(thought, W, H)
             draw_my_text(img, thought)
-    os.system("uploadr.py")
+#   Disabled for testing purposes
+#   os.system("uploadr.py")
