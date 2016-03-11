@@ -1,5 +1,5 @@
 # ShinyChromeShower
-ShinyChromeShower is a python script which pulls wallpapers and overlays 'ShowerThoughts' from reddit.com/r/showerthoughts onto them. These wallpapers are then uploaded to your personal flickr library which allows them to be used as a backdrop on your Chromecast. ShinyChromeShower uses [flickr-uploadr](https://github.com/trickortweak/flickr-uploader) by trickortweak.
+ShinyChromeShower is a python script which pulls wallpapers and overlays 'ShowerThoughts' from (/r/showerthoughts)[www.reddit.com/r/showerthoughts] onto them. These wallpapers are then uploaded to your personal flickr library which allows them to be used as a backdrop on your Chromecast. ShinyChromeShower uses [flickr-uploadr](https://github.com/trickortweak/flickr-uploader) by trickortweak.
 
 ##Requirements
 * Python 2.7
