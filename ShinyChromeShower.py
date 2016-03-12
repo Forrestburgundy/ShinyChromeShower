@@ -91,9 +91,6 @@ def draw_my_text(image, text):
                         align='center', spacing=5, fill="white")
     img.save(imageName, "JPEG", quality=100, optimize=True, progressive=True)
 
-def upload_to_flickr(imageName):
-    TODO
-
 if __name__ == "__main__":
     for i in range(LIM):
         image = next(images)
@@ -104,9 +101,10 @@ if __name__ == "__main__":
             W, H = get_image_size(image.url)
         except IOError:
             continue
-        "Arbitrary threshold for aspect ratio, seems to work well"
-        if .5 < H/W and H/W < .67:
-            "Label image using current date, time and image in sequence."
+        """Arbitrary threshold for aspect ratio, seems to work well.
+           require a minimum of 1080p."""
+        if .5 < H/W and H/W < .67 and H*W >= 1920*1080:
+            "Label image using current date and image in sequence."
             imageName = time.strftime("%d%m%y"+ str(i) + ".jpg")
             urllib.urlretrieve(image.url, imageName)
             "Wait for download"
@@ -117,5 +115,4 @@ if __name__ == "__main__":
             draw = ImageDraw.Draw(img)
             thought = multiline_text(thought, W, H)
             draw_my_text(img, thought)
-#   Disabled for testing purposes
-#   os.system("uploadr.py")
+os.system("uploadr.py")
