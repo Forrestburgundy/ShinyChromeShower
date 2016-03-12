@@ -15,6 +15,10 @@ You will need to create a flickr api key (can be done for free) and add your key
 
 By default, ShinyChromeShower gets the top 10 images from the EarthPorn to overlay onto. You can change this at the top of ShinyChromeShower.py as well as the font used.
 
+Once you run the script and can confirm the images are on flickr, go to the chromecast app and set flickr as your backdrop.
+
+From there, you can automate the script to run daily/weekly using cron jobs or task scheduler depending on your system.
+
 ## Disclaimer
 I'm by no means great at python and simply fiddle in my spare time. If you see something that could be improved, raise an issue or push the fix yourself.
 
