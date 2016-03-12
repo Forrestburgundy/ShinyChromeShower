@@ -1,6 +1,6 @@
  # -*- coding: utf-8 -*-
 from PIL import Image, ImageDraw, ImageFont
-import time, praw, urllib, requests
+import time, praw, urllib, requests, os
 from io import BytesIO
 
 
