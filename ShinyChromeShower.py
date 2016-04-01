@@ -2,7 +2,8 @@
 from PIL import Image, ImageDraw, ImageFont
 import time, praw, urllib, requests, os
 from io import BytesIO
-
+from jinja2 import Environment, FileSystemLoader
+import subprocess
 
 #######     SETTINGS        #######
 FONT = "Roboto-Light.ttf"
@@ -14,11 +15,12 @@ LIM = 10
 reddit = praw.Reddit(user_agent="Chromecast_Showerthoughts")
 images = reddit.get_subreddit(IMAGE_SUBREDDIT).get_top(limit=LIM)
 thoughts = reddit.get_subreddit(TEXT_SUBREDDIT).get_top(limit=LIM)
+env = Environment(loader=FileSystemLoader('templates'))
 
 def get_image_size(url):
     """
     Gets the dimensions of a web image. url must be a direct link to the image,
-    currently little support around this. Will timeout if 
+    currently little support around this. Will timeout if
 
     Args:
         url (string): The url of the hosted image
@@ -60,6 +62,24 @@ def multiline_text(text, image_width, image_height):
         length += len("\n")
     return text
 
+def fill_template_url(template, image_url, text):
+    """
+    Uses jinja2 to fill a given template with the image and text.
+
+    Args:
+        template (string): the html file to edit
+        image_url (string): the url for the image to place in the template
+        text (string): the text to put in the centre of the image
+    """
+    template = env.get_template(template)
+    output = template.render(image=image_url, showerthought=text)
+    with open("test.html", "wb") as fh:
+        fh.write(output)
+
+def capture_template(filename):
+    return subprocess.call(r"wkhtmltopdf\bin\wkhtmltoimage --height 1080" +
+    "--width 1920 test.html" + os.getcwd() + "\\" + filename , shell=True)
+
 def draw_my_text(image, text):
     """
     Draws the text over the given image.
@@ -71,7 +91,8 @@ def draw_my_text(image, text):
         text (string): the text to draw over the image.
         w (int): this is the x position of where to put the top left corner of
             the text. Different for single line and multiline text.
-        h (int): this is the y position of where to put the top left corner of the text.
+        h (int): this is the y position of where to put the top left corner of
+        the text.
 
     """
     h = (image.size[1] - ((text.count('\n')+1) * (font.getsize(text)[1] + 5)))/2
@@ -115,4 +136,15 @@ if __name__ == "__main__":
             draw = ImageDraw.Draw(img)
             thought = multiline_text(thought, W, H)
             draw_my_text(img, thought)
+            #fi
+            Uses jinja2 to fill a given template with the image and text.
+
+            Args:
+                template (string): the html file to edit
+                image_url (string): the url for the image to place in the template
+                text (string): the text to put in the centre of the image
+
+("template.html",
+            """image.url, thought)
+            #capture_template(imageName)
 os.system("uploadr.py")
