@@ -10,6 +10,9 @@ FONT = "Roboto-Light.ttf"
 IMAGE_SUBREDDIT = "EarthPorn"
 TEXT_SUBREDDIT = "Showerthoughts"
 LIM = 10
+MIN_RESOLUTION = (1920,1080)
+#Tolerence is out of 0 to 100 (Percentage)
+ASPECT_TOLERENCE = 18
 ###################################
 
 reddit = praw.Reddit(user_agent="Chromecast_Showerthoughts")
@@ -31,6 +34,40 @@ def get_image_size(url):
     data = requests.get(url, timeout=(1, 1)).content
     im = Image.open(BytesIO(data))
     return float(im.size[0]), float(im.size[1])
+
+def verify_image_sizing(img_H, img_W, min_RES, tolerance):
+	#Returns boolean value of whether image being pulled conforms to contraints.
+
+	#Set default response
+	verified = False
+	
+	#Ensure Tolerance value is within required range (0-100)
+	if tolerance >= 0 and tolerance <= 100:
+		tolerance = tolerance / 100.0
+	else:
+		print "Tolerence entered does not meet requirements, must be a whole value between 0-100. Quit script."
+		quit()
+
+	#Load H and W into seperate variables
+	min_RES_W = float(min_RES[0])
+	min_RES_H = float(min_RES[1])
+
+	#Get aspect decimal for image being pulled and pixel count
+	img_aspect = float(img_H)/float(img_W)
+	img_pixel = img_H*img_W
+
+	#Get high and low for tolerance against aspect ratio's
+	req_aspect_min = (min_RES_H/min_RES_W) * ( 1 - tolerance)
+	req_aspect_max = (min_RES_H/min_RES_W) * (1 + tolerance)
+
+	#Get minimum pixel count in image
+	req_pixel_min = min_RES_H*min_RES_W
+
+	if req_aspect_min <= img_aspect and img_aspect <= req_aspect_max and img_pixel >= req_pixel_min:
+		#Image is within tolerance specified and has more pixels then the min stated.
+		verified = True
+	
+	return verified	
 
 def multiline_text(text, image_width, image_height):
     """
@@ -122,9 +159,8 @@ if __name__ == "__main__":
             W, H = get_image_size(image.url)
         except IOError:
             continue
-        """Arbitrary threshold for aspect ratio, seems to work well.
-           require a minimum of 1080p."""
-        if .5 < H/W and H/W < .67 and H*W >= 1920*1080:
+
+	if verify_image_sizing(H, W, MIN_RESOLUTION, ASPECT_TOLERENCE) == True:
             "Label image using current date and image in sequence."
             imageName = time.strftime("%d%m%y"+ str(i) + ".jpg")
             urllib.urlretrieve(image.url, imageName)
