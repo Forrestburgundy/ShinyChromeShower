@@ -2,8 +2,8 @@
 from PIL import Image, ImageDraw, ImageFont
 import time, praw, urllib, requests, os
 from io import BytesIO
-from jinja2 import Environment, FileSystemLoader
-import subprocess
+#from jinja2 import Environment, FileSystemLoader
+#import subprocess
 
 #######     SETTINGS        #######
 FONT = "Roboto-Light.ttf"
@@ -136,15 +136,5 @@ if __name__ == "__main__":
             draw = ImageDraw.Draw(img)
             thought = multiline_text(thought, W, H)
             draw_my_text(img, thought)
-            #fi
-            Uses jinja2 to fill a given template with the image and text.
 
-            Args:
-                template (string): the html file to edit
-                image_url (string): the url for the image to place in the template
-                text (string): the text to put in the centre of the image
-
-("template.html",
-            """image.url, thought)
-            #capture_template(imageName)
 os.system("uploadr.py")
